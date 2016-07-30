@@ -1,0 +1,134 @@
+unit Unit1;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Data.Win.ADODB,Data.DB, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.DBCtrls,
+  Vcl.Grids, Vcl.DBGrids;
+
+type
+  {TDBGrid = class(TDBGrid)
+      procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
+  protected
+    procedure CMIngamut(var Message: TMessage); message CM_IN_GAMUT;
+  end;  }
+  TForm1 = class(TForm)
+    Panel1: TPanel;
+    Panel2: TPanel;
+    Panel3: TPanel;
+    DBCBtype: TDBLookupComboBox;
+    DBGrid1: TDBGrid;
+    ListBox1: TListBox;
+    Label1: TLabel;
+    Button1: TButton;
+    procedure DBCBtypeClick(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure ListBox1DragOver(Sender, Source: TObject; X, Y: Integer;
+      State: TDragState; var Accept: Boolean);
+    procedure ListBox1DragDrop(Sender, Source: TObject; X, Y: Integer);
+    procedure ListBox1EndDrag(Sender, Target: TObject; X, Y: Integer);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure DBGrid1MouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure Button1Click(Sender: TObject);
+    //procedure DBGrid1MouseDown(Sender: TObject; Button: TMouseButton;
+      //Shift: TShiftState; X, Y: Integer);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+
+implementation
+
+{$R *.dfm}
+
+uses dmpubs;
+
+procedure TForm1.Button1Click(Sender: TObject);
+begin
+Listbox1.Clear;
+end;
+
+procedure TForm1.DBCBtypeClick(Sender: TObject);
+begin
+  showmessage('Book Type: ' + dbcbtype.KeyValue);
+
+  dmpub.tbooks.Filter := 'type = ' + quotedstr(dbcbtype.KeyValue);
+  dmpub.tbooks.Filtered := true;
+
+  end;
+
+procedure TForm1.DBGrid1CellClick(Column: TColumn);
+begin
+  DBGrid1.BeginDrag(true);
+end;
+
+procedure TForm1.DBGrid1DblClick(Sender: TObject);
+Var I : integer;
+begin
+  //double click disables with mouse down event handler
+  ListBox1.AddItem(DBGrid1.fields[1].asstring,TObject(DBgrid1.Fields[2].asstring));
+end;
+
+
+procedure TForm1.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  if (gdSelected in State) then
+  begin
+     DBGrid1.Canvas.Font.Color := clWhite;
+     DBGrid1.Canvas.Brush.Color := clTeal;
+     DBGrid1.DefaultDrawColumnCell(Rect,DataCol,column,state);
+     //DBGrid1.Canvas.FillRect(Rect);
+     //DBGrid1.Canvas.TextOut(Rect.Left, Rect.Top,Column.Field.AsString);
+  end
+
+end;
+
+
+//Procedure is never triggered and not necessary
+procedure TForm1.DBGrid1MouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  label1.Caption := 'Mouse Down';
+  BeginDrag(false);
+end;
+
+
+procedure TForm1.ListBox1DragDrop(Sender, Source: TObject; X, Y: Integer);
+var
+  I: Integer;
+begin
+  for I := 0 to DBGrid1.FieldCount-3
+   do
+    ListBox1.items.Add(DBgrid1.fields[I].AsString);
+
+  label1.Caption := 'Mouse Up';
+end;
+
+procedure TForm1.ListBox1DragOver(Sender, Source: TObject; X, Y: Integer;
+  State: TDragState; var Accept: Boolean);
+begin
+  label1.Caption := 'Mouse Down';
+  Accept := Source is TDBGRID;
+
+end;
+
+procedure TForm1.ListBox1EndDrag(Sender, Target: TObject; X, Y: Integer);
+begin
+  if target <> nil then
+    ListBox1.Update;
+  label1.Caption := 'End Drag';
+end;
+
+end.
+
+

@@ -1,0 +1,31 @@
+object dmpub: Tdmpub
+  OldCreateOrder = False
+  Height = 503
+  Width = 573
+  object ADOConnection1: TADOConnection
+    Connected = True
+    ConnectionString = 
+      'Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security In' +
+      'fo=False;Initial Catalog=pubs;Data Source=IMAGINE-PC\SQLEXPRESS'
+    LoginPrompt = False
+    Provider = 'SQLOLEDB.1'
+    Left = 472
+    Top = 432
+  end
+  object tbooks: TADOTable
+    Connection = ADOConnection1
+    TableName = 'titles'
+    Left = 392
+    Top = 376
+  end
+  object qbooks: TADOQuery
+    Parameters = <>
+    Left = 320
+    Top = 432
+  end
+  object dsBooks: TDataSource
+    DataSet = tbooks
+    Left = 392
+    Top = 432
+  end
+end

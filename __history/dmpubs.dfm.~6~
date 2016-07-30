@@ -1,0 +1,95 @@
+object dmpub: Tdmpub
+  OldCreateOrder = False
+  Height = 503
+  Width = 573
+  object ADOConnection: TADOConnection
+    Connected = True
+    ConnectionString = 
+      'Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security In' +
+      'fo=False;Initial Catalog=pubs;Data Source=IMAGINE-PC\SQLEXPRESS'
+    LoginPrompt = False
+    Provider = 'SQLOLEDB.1'
+    Left = 472
+    Top = 432
+  end
+  object tbooks: TADOTable
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    TableName = 'titles'
+    Left = 192
+    Top = 328
+    object tbookstitle: TStringField
+      FieldName = 'title'
+      Size = 80
+    end
+    object tbookstype: TStringField
+      FieldName = 'type'
+      FixedChar = True
+      Size = 12
+    end
+    object tbookspub_id: TStringField
+      FieldName = 'pub_id'
+      FixedChar = True
+      Size = 4
+    end
+    object tbooksprice: TBCDField
+      FieldName = 'price'
+      Precision = 19
+    end
+    object tbooksadvance: TBCDField
+      FieldName = 'advance'
+      Precision = 19
+    end
+    object tbooksnotes: TStringField
+      FieldName = 'notes'
+      Size = 200
+    end
+    object tbookstitle_id: TStringField
+      FieldName = 'title_id'
+      Size = 6
+    end
+  end
+  object qbooktype: TADOQuery
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    Parameters = <>
+    SQL.Strings = (
+      'Select Distinct'
+      'Type from titles')
+    Left = 248
+    Top = 376
+    object qbooktypeType: TStringField
+      FieldName = 'Type'
+      FixedChar = True
+      Size = 12
+    end
+  end
+  object dsBooktype: TDataSource
+    DataSet = qbooktype
+    Left = 248
+    Top = 432
+  end
+  object ADODataSet1: TADODataSet
+    Active = True
+    Connection = ADOConnection
+    CursorType = ctStatic
+    CommandText = 'titles'
+    CommandType = cmdTable
+    Parameters = <>
+    Left = 328
+    Top = 304
+  end
+  object qbooks: TADOQuery
+    Connection = ADOConnection
+    Parameters = <>
+    Left = 192
+    Top = 376
+  end
+  object dsbooks: TDataSource
+    DataSet = tbooks
+    Left = 192
+    Top = 432
+  end
+end

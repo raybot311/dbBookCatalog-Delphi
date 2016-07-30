@@ -1,0 +1,31 @@
+object DataModule2: TDataModule2
+  OldCreateOrder = False
+  Height = 503
+  Width = 573
+  object ADOConnection1: TADOConnection
+    Connected = True
+    ConnectionString = 
+      'Provider=SQLOLEDB.1;Integrated Security=SSPI;Persist Security In' +
+      'fo=False;Initial Catalog=pubs;Data Source=IMAGINE-PC\SQLEXPRESS'
+    LoginPrompt = False
+    Provider = 'SQLOLEDB.1'
+    Left = 464
+    Top = 416
+  end
+  object ADOTable1: TADOTable
+    Connection = ADOConnection1
+    TableName = 'titles'
+    Left = 472
+    Top = 360
+  end
+  object ADOQuery1: TADOQuery
+    Parameters = <>
+    Left = 392
+    Top = 376
+  end
+  object DataSource1: TDataSource
+    DataSet = ADOTable1
+    Left = 392
+    Top = 432
+  end
+end
